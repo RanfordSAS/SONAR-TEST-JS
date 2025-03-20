@@ -13,23 +13,31 @@ pipeline {
         git branch: 'main', url: 'https://github.com/RanfordSAS/SONAR-TEST-JS.git'
       }
     }
+
+    // Stage 2: Print files to be reviewed
+    stage('List Files') {
+      steps {
+        bat 'dir /s /b' // Lists all files in the workspace (Windows)
+        // For Linux/Mac, use: sh 'find .'
+      }
+    }
+
     /*
-    // Stage 2: Create and activate a Python virtual environment
+    // Stage 3: Create and activate a Python virtual environment
     stage('Setup Virtual Environment') {
       steps {
         bat 'python -m venv venv'
       }
     }
 
-    // Stage 3: Install Python dependencies inside the virtual environment
+    // Stage 4: Install Python dependencies inside the virtual environment
     stage('Install Dependencies') {
       steps {
         bat 'call venv\\Scripts\\activate && pip install -r requirements.txt'
       }
     }
 
-    // Stage 4: Run tests and generate coverage report (optional)
-
+    // Stage 5: Run tests and generate coverage report (optional)
     stage('Run Tests') {
       steps {
         bat 'call venv\\Scripts\\activate && pytest --cov=./ --cov-report=xml:coverage.xml'
@@ -37,7 +45,7 @@ pipeline {
     }
     */
 
-    // Stage 5: Run SonarQube analysis
+    // Stage 6: Run SonarQube analysis
     stage('SonarQube Analysis') {
       steps {
         withSonarQubeEnv(installationName: 'sq_test') { // 'sq_test' is the name of the SonarQube server configured in Jenkins
